@@ -14,7 +14,7 @@
 #define MaxClients 20
 
 new Handle:deathrun_manager_version	= INVALID_HANDLE;
-new Handle:deathrun_enabled			= INVALID_HANDLE;
+new Handle:deathrun_enabled		= INVALID_HANDLE;
 new Handle:deathrun_swapteam		= INVALID_HANDLE;
 new Handle:deathrun_block_radio		= INVALID_HANDLE;
 new Handle:deathrun_block_suicide	= INVALID_HANDLE;
@@ -22,7 +22,7 @@ new Handle:deathrun_limit_terror	= INVALID_HANDLE;
 new Handle:deathrun_block_sprays	= INVALID_HANDLE;
 new Handle:deathrun_fix_spawns		= INVALID_HANDLE;
 
-new Handle:RoundTime				= INVALID_HANDLE;
+new Handle:RoundTime			= INVALID_HANDLE;
 
 new RadioCommands[][] =
 {
@@ -83,13 +83,13 @@ public OnPluginStart()
 	//HookEvent("player_disconnect", Event_PlayerDisconnect, EventHookMode_Pre);
 	
 	deathrun_manager_version 	= CreateConVar("deathrun_manager_version", PLUGIN_VERSION, "Deathrun Manager version; not changeable", FCVAR_PLUGIN|FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY|FCVAR_DONTRECORD);
-	deathrun_enabled 			= CreateConVar("deathrun_enabled", "1", "Enable or disable Deathrun Manager; 0 - disabled, 1 - enabled");
-	deathrun_swapteam 			= CreateConVar("deathrun_swapteam", "1", "Enable or disable automatic swapping of CTs and Ts; 1 - enabled, 0 - disabled");
+	deathrun_enabled 		= CreateConVar("deathrun_enabled", "1", "Enable or disable Deathrun Manager; 0 - disabled, 1 - enabled");
+	deathrun_swapteam 		= CreateConVar("deathrun_swapteam", "1", "Enable or disable automatic swapping of CTs and Ts; 1 - enabled, 0 - disabled");
 	deathrun_block_radio 		= CreateConVar("deathrun_block_radio", "1", "Allow or disallow radio commands; 1 - radio commands are blocked, 0 - radio commands can be used");
 	deathrun_block_suicide 		= CreateConVar("deathrun_block_suicide", "1", "Block or allow the 'kill' command; 1 - command is blocked, 0 - command is allowed");
 	deathrun_limit_terror 		= CreateConVar("deathrun_limit_terror", "0", "Limits terrorist team to chosen value; 0 - disabled");
 	deathrun_block_sprays 		= CreateConVar("deathrun_block_sprays", "0", "Blocks player sprays; 1 - enabled, 0 - disabled");
-	deathrun_fix_spawns			= CreateConVar("deathrun_fix_spawns", "1", "Fixes glitched spawns on a specific map");
+	deathrun_fix_spawns		= CreateConVar("deathrun_fix_spawns", "1", "Fixes glitched spawns on a specific map");
 	
 	SetConVarString(deathrun_manager_version, PLUGIN_VERSION);
 	AutoExecConfig(true, "deathrun_manager");
@@ -257,7 +257,7 @@ GetRandomPlayer(team)
 
 public Action:Event_PlayerSpawn(Handle:event, const String:name[], bool:dontBroadcast)
 {
-    new client = GetClientOfUserId(GetEventInt(event, "userid"));
+	new client = GetClientOfUserId(GetEventInt(event, "userid"));
 	decl String:mapname[128];
 	GetCurrentMap(mapname, sizeof(mapname));
 	if (GetConVarInt(deathrun_fix_spawns) == 1 && (strncmp(mapname, "deathrun_stone", 14, false) == 0))
