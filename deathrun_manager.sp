@@ -76,7 +76,6 @@ public OnPluginStart()
 	
 	AddTempEntHook("Player Decal", PlayerSpray);
 	
-	HookEvent("player_death", Event_PlayerDeath);
 	HookEvent("round_start",Event_RoundStart);
 	HookEvent("round_end", Event_RoundEnd);
 	HookEvent("player_spawn", Event_PlayerSpawn);
@@ -158,31 +157,6 @@ public Event_RoundEnd(Handle:event, const String:name[], bool:dontBroadcast)
 			CS_SwitchTeam(GetRandomPlayer(TEAM_CT), TEAM_T);// I had it in a loop but for some reason it was not working, so...
 			CS_SwitchTeam(GetRandomPlayer(TEAM_CT), TEAM_T);
 		}
-	}
-}
-
-public Event_PlayerDeath(Handle:event, const String:name[], bool:dontBroadcast)
-{
-	new client = GetClientOfUserId(GetEventInt(event,"userid"));
-	/*if (GetConVarInt(deathrun_enabled) == 1 && (GetConVarInt(deathrun_swapteam) == 1) && (GetClientTeam(client) == TEAM_T))
-	{
-		moveter(client);
-	}
-	*/
-}
-
-void:movetotr(client)
-{
-	CreateTimer(1.5, movetotrr, client);
-}
-
-public Action:movetotrr(Handle:timer, any:client)
-{
-	new counter = GetRandomPlayer(TEAM_CT);
-	if ((counter != -1) && (GetTeamClientCount(TEAM_T) == 0))
-	{
-		CS_SwitchTeam(counter, TEAM_T);
-		CPrintToChatAll(MESS, "random moved");
 	}
 }
 
