@@ -1,0 +1,4 @@
+*.exe
+*.inc
+include/plugin_settings.cfg
+*.smx
