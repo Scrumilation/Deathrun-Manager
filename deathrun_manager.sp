@@ -10,7 +10,7 @@
 #define MESS  "{GREEN}[{LIGHTGREEN}Zonix{GREEN}] %t"
 #define TEAM_T 2
 #define TEAM_CT 3
-#define PLUGIN_VERSION	 "1.2"
+#define PLUGIN_VERSION	 "1.3"
 #define MaxClients 20
 
 new Handle:deathrun_manager_version	= INVALID_HANDLE;
@@ -79,7 +79,7 @@ public OnPluginStart()
 	HookEvent("round_start",Event_RoundStart);
 	HookEvent("round_end", Event_RoundEnd);
 	HookEvent("player_spawn", Event_PlayerSpawn);
-	//HookEvent("player_disconnect", Event_PlayerDisconnect, EventHookMode_Pre);
+	HookEvent("player_disconnect", Event_PlayerDisconnect, EventHookMode_Pre);
 	
 	deathrun_manager_version 	= CreateConVar("deathrun_manager_version", PLUGIN_VERSION, "Deathrun Manager version; not changeable", FCVAR_PLUGIN|FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY|FCVAR_DONTRECORD);
 	deathrun_enabled 		= CreateConVar("deathrun_enabled", "1", "Enable or disable Deathrun Manager; 0 - disabled, 1 - enabled");
@@ -123,7 +123,7 @@ public Event_RoundStart(Handle:event, const String:name[], bool:dontBroadcast)
 			if(GetClientCount() > 1)
 			{	
 				CPrintToChatAll("{GREEN}[{LIGHTGREEN}DeathRun{GREEN}]Algo deu errado, nenhum terrorista encontrado, reiniciando o round");
-				//EndRound();
+				EndRound();
 			}
 		}
 	}
@@ -248,15 +248,11 @@ public Action:Event_PlayerSpawn(Handle:event, const String:name[], bool:dontBroa
 	return Plugin_Continue;
 }
 
-/*
 EndRound()
 {
-	new Handle:roundEndEvent = CreateEvent("round_end");
-	FireEvent(roundEndEvent);
+	CS_TerminateRound(0.1, CSRoundEnd_Draw);
 }
-*/
 
-/*
 public Action:Event_PlayerDisconnect(Handle:event, const String:name[], bool:dontBroadcast)
 {
 	if(GetConVarInt(deathrun_enabled) == 1 && (GetConVarInt(deathrun_swapteam) == 1))
@@ -270,4 +266,4 @@ public Action:Event_PlayerDisconnect(Handle:event, const String:name[], bool:don
 	}
 	return Plugin_Continue;
 }
-*/
+
