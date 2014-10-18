@@ -5,6 +5,8 @@
 #include <csgocolors>
 #undef REQUIRE_EXTENSIONS
 #include <cstrike>
+#include <sdktools>
+#include <sdkhooks>
 #define REQUIRE_EXTENSIONS
 
 #define MESS  "{GREEN}[{LIGHTGREEN}Zonix{GREEN}] %t"
@@ -12,6 +14,7 @@
 #define TEAM_CT 3
 #define PLUGIN_VERSION	 "1.3"
 #define MaxClients 20
+#define DMG_FALL   (1 << 5)
 
 new Handle:deathrun_manager_version	= INVALID_HANDLE;
 new Handle:deathrun_enabled		= INVALID_HANDLE;
@@ -76,7 +79,6 @@ public OnPluginStart()
 	
 	AddTempEntHook("Player Decal", PlayerSpray);
 	
-	HookEvent("round_start",Event_RoundStart);
 	HookEvent("round_end", Event_RoundEnd);
 	HookEvent("player_spawn", Event_PlayerSpawn);
 	HookEvent("player_disconnect", Event_PlayerDisconnect, EventHookMode_Pre);
@@ -114,19 +116,9 @@ public OnConfigsExecuted()
 	}
 }
 
-public Event_RoundStart(Handle:event, const String:name[], bool:dontBroadcast)
+public OnClientPutInServer(client)
 {
-	if (GetConVarInt(deathrun_enabled) == 1 && (GetConVarInt(deathrun_swapteam) == 1))
-	{
-		if(GetTeamClientCount(TEAM_T) == 0)
-		{
-			if(GetClientCount() > 1)
-			{	
-				CPrintToChatAll("{GREEN}[{LIGHTGREEN}DeathRun{GREEN}]Algo deu errado, nenhum terrorista encontrado, reiniciando o round");
-				EndRound();
-			}
-		}
-	}
+	SDKHook(client, SDKHook_OnTakeDamage, OnTakeDamage);
 }
 				
 public Event_RoundEnd(Handle:event, const String:name[], bool:dontBroadcast)
@@ -158,6 +150,15 @@ public Event_RoundEnd(Handle:event, const String:name[], bool:dontBroadcast)
 			CS_SwitchTeam(GetRandomPlayer(TEAM_CT), TEAM_T);
 		}
 	}
+}
+
+public Action:OnTakeDamage(client, &attacker, &inflictor, &Float:damage, &damagetype)
+{
+	if ((GetConVarInt(deathrun_enabled) == 0) && (damagetype & DMG_FALL))
+	{
+		return Plugin_Handled;
+	}
+return Plugin_Continue;
 }
 
 public Action:BlockRadio(client, const String:command[], args)
