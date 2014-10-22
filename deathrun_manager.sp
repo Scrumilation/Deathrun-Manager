@@ -12,9 +12,8 @@
 #define MESS  "{GREEN}[{LIGHTGREEN}Zonix{GREEN}] %t"
 #define TEAM_T 2
 #define TEAM_CT 3
-#define PLUGIN_VERSION	 "1.3"
+#define PLUGIN_VERSION	 "1.3.3.7"
 #define MaxClients 20
-#define DMG_FALL   (1 << 5)
 
 new Handle:deathrun_manager_version	= INVALID_HANDLE;
 new Handle:deathrun_enabled		= INVALID_HANDLE;
@@ -115,12 +114,7 @@ public OnConfigsExecuted()
 		SetConVarInt(RoundTime, 0);
 	}
 }
-
-public OnClientPutInServer(client)
-{
-	SDKHook(client, SDKHook_OnTakeDamage, OnTakeDamage);
-}
-				
+			
 public Event_RoundEnd(Handle:event, const String:name[], bool:dontBroadcast)
 {
 	if (GetConVarInt(deathrun_enabled) == 1 && (GetConVarInt(deathrun_swapteam) == 1))
@@ -150,15 +144,6 @@ public Event_RoundEnd(Handle:event, const String:name[], bool:dontBroadcast)
 			CS_SwitchTeam(GetRandomPlayer(TEAM_CT), TEAM_T);
 		}
 	}
-}
-
-public Action:OnTakeDamage(client, &attacker, &inflictor, &Float:damage, &damagetype)
-{
-	if ((GetConVarInt(deathrun_enabled) == 0) && (damagetype & DMG_FALL))
-	{
-		return Plugin_Handled;
-	}
-return Plugin_Continue;
 }
 
 public Action:BlockRadio(client, const String:command[], args)
