@@ -26,7 +26,7 @@ new Handle:deathrun_fix_spawns		= INVALID_HANDLE;
 
 new Handle:RoundTime			= INVALID_HANDLE;
 
-new RadioCommands[][] =
+new String:RadioCommands[][] =
 {
 	"coverme",
 	"cheer",
